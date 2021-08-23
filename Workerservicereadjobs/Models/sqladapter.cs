@@ -31,7 +31,7 @@ namespace Workerservicereadjobs.Models
                     .WithIntervalInMinutes(changedEntity.frequence)
                     .RepeatForever()).EndAt(changedEntity.endat)
                     .Build();
-
+            
              _scheduler.ScheduleJob(job1, trigger1, _stopppingToken);
 
 

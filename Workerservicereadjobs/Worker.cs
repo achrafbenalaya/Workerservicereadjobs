@@ -23,7 +23,8 @@ namespace Workerservicereadjobs
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            await StartJobs();
+            //await StartJobs();
+            await _scheduler.Start();
             _stopppingToken = stoppingToken;
             while (!stoppingToken.IsCancellationRequested)
             {
@@ -33,32 +34,34 @@ namespace Workerservicereadjobs
         }
 
 
-        protected async Task StartJobs()
-        {
-            await NewMethod();
+        //protected async Task StartJobs()
+        //{
+        //    await NewMethod();
 
-            IJobDetail job1 = JobBuilder.Create<Job1>()
-                .WithIdentity("job1", "gtoup")
-                .Build();
+        //    IJobDetail job1 = JobBuilder.Create<Job1>()
+        //        .WithIdentity("job1", "gtoup")
+        //        .Build();
 
-            ITrigger trigger1 = TriggerBuilder.Create()
-                .WithIdentity("trigger_10_sec", "group")
-                .StartAt(System.DateTimeOffset.UtcNow)
-                .WithSimpleSchedule(x => x
-                    .WithIntervalInMinutes(1)
-                    .RepeatForever()).EndAt(new DateTimeOffset(2021, 8, 31, 9, 0, 0, new TimeSpan(1, 0, 0)))
-            .Build();
+        //    ITrigger trigger1 = TriggerBuilder.Create()
+        //        .WithIdentity("trigger_10_sec", "group")
+        //        .StartAt(System.DateTimeOffset.UtcNow)
+        //        .WithSimpleSchedule(x => x
+        //            .WithIntervalInMinutes(1)
+        //            .RepeatForever()).EndAt(new DateTimeOffset(2021, 8, 31, 9, 0, 0, new TimeSpan(1, 0, 0)))
+        //    .Build();
 
-           
+          
+        //}
 
-        }
-
-        private async Task NewMethod(IJobDetail job1, ITrigger trigger1)
+        private async Task genralschedulerjob(IJobDetail job1, ITrigger trigger1)
         {
             _schedulerFactory = new StdSchedulerFactory();
 
             _scheduler = await _schedulerFactory.GetScheduler();
-            await _scheduler.Start();
+            //await _scheduler.Start();
+           // _scheduler.CheckExists
+          var resturnedtrigger=  await _scheduler.GetTrigger(trigger1.Key);
+            //resturnedtrigger.
             await _scheduler.ScheduleJob(job1, trigger1, _stopppingToken);
         }
         //comunicate db lister
